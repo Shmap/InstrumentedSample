@@ -15,7 +15,11 @@ public:
     void StopWorking();
 
 private:
-    void SimpleFunction();
+    void WaitAndBusyThread(uint32_t milliseconds);
+
+    void FirstFunction();
+    void SecondFunction(uint32_t number);
+    void FunctionWithLotOfMetadata();
 
     std::atomic<bool> m_is_stopped = false;
 };

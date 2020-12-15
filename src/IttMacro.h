@@ -22,6 +22,7 @@ limitations under the License.
 #include <string>
 #include <type_traits>
 #include <thread>
+#include <nowide/convert.hpp>
 
 #define INTEL_ITTNOTIFY_API_PRIVATE
 #include <ittnotify.h>
@@ -59,11 +60,14 @@ namespace Itt
             __itt_metadata_add(m_p_domain, m_id, p_name, __itt_metadata_s64, 1, &value);
         }
 
-        void AddArg(__itt_string_handle* p_name, const wchar_t* value) const noexcept
+        void AddArg(__itt_string_handle* p_name, const char* value) const noexcept
         {
-            // TODO: CHAR / WCHAR CONVERSION
+#if ITT_PLATFORM==ITT_PLATFORM_WIN && (defined(UNICODE) || defined(_UNICODE))
             // string value must be converted to wchar_t
-            __itt_metadata_str_addW(m_p_domain, m_id, p_name, value, 0);
+            __itt_metadata_str_add(m_p_domain, m_id, p_name, nowide::widen(value).c_str(), 0);
+#else
+            __itt_metadata_str_add(m_p_domain, m_id, p_name, value, 0);
+#endif
         }
 
         void AddArg(__itt_string_handle* p_name, void const* const p_value) const noexcept
