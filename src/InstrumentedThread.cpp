@@ -1,10 +1,14 @@
 #include "InstrumentedThread.h"
 #include <ittnotify.h>
 
+InstrumentedWorker::InstrumentedWorker()
+    : m_counter("Counter 10-5", g_default_itt_domain_name)
+{
+}
+
 void InstrumentedWorker::StartWorking()
 {
     ITT_THREAD_NAME("Instrumented thread");
-
     while (!m_is_stopped)
     {
         FirstFunction();
@@ -33,6 +37,7 @@ void InstrumentedWorker::FirstFunction()
     ITT_SCOPE_TASK("First function on stack");
     static uint64_t number = 0;
     ITT_FUNCTION_ARG("Call No", number);
+    m_counter.SetValue(10);
 
     WaitAndBusyThread(250);
     SecondFunction(1);
@@ -45,31 +50,32 @@ void InstrumentedWorker::FirstFunction()
     ITT_MARKER(Itt::Marker::Scope::Thread, "Thread scope marker");
     ITT_MARKER_ARG("Scope", "Thread");
 
-    double      metadata_double = 100.100;
-    float       metadata_float = 100.1f;
-    int16_t     metadata_int16_t = -100;
+    double      metadata_double   = 100.100;
+    float       metadata_float    = 100.1f;
+    int16_t     metadata_int16_t  = -100;
     uint16_t    metadata_uint16_t = 100u;
-    int32_t     metadata_int32_t = -100;
+    int32_t     metadata_int32_t  = -100;
     uint32_t    metadata_uint32_t = 100;
-    int64_t     metadata_int64_t = -100;
+    int64_t     metadata_int64_t  = -100;
     uint64_t    metadata_uint64_t = 100u;
-    std::string metadata_string = "metadata string";
+    std::string metadata_string   = "metadata string";
 
-    ITT_MARKER_ARG("double", metadata_double);
-    ITT_MARKER_ARG("float", metadata_float);
-    ITT_MARKER_ARG("int16_t", metadata_int16_t);
+    ITT_MARKER_ARG("double",   metadata_double);
+    ITT_MARKER_ARG("float",    metadata_float);
+    ITT_MARKER_ARG("int16_t",  metadata_int16_t);
     ITT_MARKER_ARG("uint16_t", metadata_uint16_t);
-    ITT_MARKER_ARG("int32_t", metadata_int32_t);
+    ITT_MARKER_ARG("int32_t",  metadata_int32_t);
     ITT_MARKER_ARG("uint32_t", metadata_uint32_t);
-    ITT_MARKER_ARG("int64_t", metadata_int64_t);
+    ITT_MARKER_ARG("int64_t",  metadata_int64_t);
     ITT_MARKER_ARG("uint64_t", metadata_uint64_t);
-    ITT_MARKER_ARG("string", metadata_string);
+    ITT_MARKER_ARG("string",   metadata_string);
 }
 
 void InstrumentedWorker::SecondFunction(uint32_t number)
 {
     ITT_SCOPE_TASK("Second function on stack");
     ITT_FUNCTION_ARG("Func No", number);
+    m_counter.SetValue(5);
     FunctionWithAllMetadata();
     WaitAndBusyThread(100);
 }

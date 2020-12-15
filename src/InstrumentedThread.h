@@ -8,7 +8,7 @@
 class InstrumentedWorker
 {
 public:
-    InstrumentedWorker() = default;
+    InstrumentedWorker();
     ~InstrumentedWorker() = default;
 
     void StartWorking();
@@ -21,5 +21,6 @@ private:
     void SecondFunction(uint32_t number);
     void FunctionWithAllMetadata();
 
-    std::atomic<bool> m_is_stopped = false;
+    std::atomic<bool>      m_is_stopped = false;
+    Itt::Counter<uint32_t> m_counter;
 };
