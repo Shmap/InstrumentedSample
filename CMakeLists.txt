@@ -7,10 +7,7 @@ project(InstrumentedSample
         LANGUAGES C CXX
 )
 
-# =============================================================
-
 # CMake Settings
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_SUPPRESS_REGENERATION true)
 set(DCMAKE_GENERATOR_PLATFORM "x64")
@@ -28,22 +25,10 @@ if(NOT CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX d)
 endif()
 
-# =============================================================
-
 # Options
 add_definitions(-DUNICODE -D_UNICODE)
 add_subdirectory(3rdParty)
 add_subdirectory(src)
-
-# =============================================================
-
-target_include_directories(
-	${PROJECT_NAME}
-	PUBLIC
-	3rdParty/IttApi/include
-	)
-
-# =============================================================
 
 # Change output dir to bin
 set_target_properties(${PROJECT_NAME} PROPERTIES
