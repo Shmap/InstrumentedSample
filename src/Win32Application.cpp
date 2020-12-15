@@ -113,6 +113,8 @@ LRESULT CALLBACK Win32Application::WindowProc(HWND hWnd, UINT message, WPARAM wP
     case WM_PAINT:
         if (pSample)
         {
+            ITT_MARKER(Itt::Marker::Scope::Global, "WM_PAINT message");
+            ITT_MARKER_ARG("Scope", "Global");
             pSample->OnUpdate();
             pSample->OnRender();
         }

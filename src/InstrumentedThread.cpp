@@ -40,17 +40,41 @@ void InstrumentedWorker::FirstFunction()
     SecondFunction(2);
     WaitAndBusyThread(250);
     number++;
+
+    // After supporting in GPU, remove metadata from here
+    ITT_MARKER(Itt::Marker::Scope::Thread, "Thread scope marker");
+    ITT_MARKER_ARG("Scope", "Thread");
+
+    double      metadata_double = 100.100;
+    float       metadata_float = 100.1f;
+    int16_t     metadata_int16_t = -100;
+    uint16_t    metadata_uint16_t = 100u;
+    int32_t     metadata_int32_t = -100;
+    uint32_t    metadata_uint32_t = 100;
+    int64_t     metadata_int64_t = -100;
+    uint64_t    metadata_uint64_t = 100u;
+    std::string metadata_string = "metadata string";
+
+    ITT_MARKER_ARG("double", metadata_double);
+    ITT_MARKER_ARG("float", metadata_float);
+    ITT_MARKER_ARG("int16_t", metadata_int16_t);
+    ITT_MARKER_ARG("uint16_t", metadata_uint16_t);
+    ITT_MARKER_ARG("int32_t", metadata_int32_t);
+    ITT_MARKER_ARG("uint32_t", metadata_uint32_t);
+    ITT_MARKER_ARG("int64_t", metadata_int64_t);
+    ITT_MARKER_ARG("uint64_t", metadata_uint64_t);
+    ITT_MARKER_ARG("string", metadata_string);
 }
 
 void InstrumentedWorker::SecondFunction(uint32_t number)
 {
     ITT_SCOPE_TASK("Second function on stack");
     ITT_FUNCTION_ARG("Func No", number);
-    FunctionWithLotOfMetadata();
+    FunctionWithAllMetadata();
     WaitAndBusyThread(100);
 }
 
-void InstrumentedWorker::FunctionWithLotOfMetadata()
+void InstrumentedWorker::FunctionWithAllMetadata()
 {
     ITT_SCOPE_TASK("Metadata checks");
 
@@ -75,4 +99,16 @@ void InstrumentedWorker::FunctionWithLotOfMetadata()
     ITT_FUNCTION_ARG("string",   metadata_string);
 
     WaitAndBusyThread(100);
+
+    ITT_MARKER(Itt::Marker::Scope::Task, "Metadata task marker");
+    ITT_MARKER_ARG("Scope", "Task");
+    ITT_MARKER_ARG("double", metadata_double);
+    ITT_MARKER_ARG("float", metadata_float);
+    ITT_MARKER_ARG("int16_t", metadata_int16_t);
+    ITT_MARKER_ARG("uint16_t", metadata_uint16_t);
+    ITT_MARKER_ARG("int32_t", metadata_int32_t);
+    ITT_MARKER_ARG("uint32_t", metadata_uint32_t);
+    ITT_MARKER_ARG("int64_t", metadata_int64_t);
+    ITT_MARKER_ARG("uint64_t", metadata_uint64_t);
+    ITT_MARKER_ARG("string", metadata_string);
 }

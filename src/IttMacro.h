@@ -35,7 +35,7 @@ limitations under the License.
 #define UNICODE_AGNOSTIC(name) name
 #endif
 
-constexpr const char* g_default_itt_domain_name = "Methane Kit";
+constexpr const char* g_default_itt_domain_name = "Instrumented Sample";
 
 namespace Itt
 {
@@ -256,6 +256,6 @@ namespace Itt
 #define ITT_THREAD_NAME(/*const char* */name) \
     UNICODE_AGNOSTIC(__itt_thread_set_name)(name)
 
-} // namespace Methane::ITT
+} // namespace Itt
 
 ITT_DOMAIN_EXTERN();

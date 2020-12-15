@@ -11,6 +11,7 @@
 
 #include "stdafx.h"
 #include "D3D12HelloTriangle.h"
+#include "IttMacro.h"
 
 D3D12HelloTriangle::D3D12HelloTriangle(UINT width, UINT height, std::wstring name) :
     DXSample(width, height, name),
@@ -270,6 +271,8 @@ void D3D12HelloTriangle::OnRender()
     ThrowIfFailed(m_swapChain->Present(1, 0));
 
     WaitForPreviousFrame();
+    ITT_MARKER(Itt::Marker::Scope::Process, "Frame end");
+    ITT_MARKER_ARG("Scope", "Process");
 }
 
 void D3D12HelloTriangle::OnDestroy()

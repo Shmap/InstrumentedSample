@@ -19,7 +19,7 @@ private:
 
     void FirstFunction();
     void SecondFunction(uint32_t number);
-    void FunctionWithLotOfMetadata();
+    void FunctionWithAllMetadata();
 
     std::atomic<bool> m_is_stopped = false;
 };
