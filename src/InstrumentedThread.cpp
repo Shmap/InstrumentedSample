@@ -89,6 +89,7 @@ void InstrumentedWorker::SecondFunction(uint32_t number)
     ITT_FUNCTION_ARG("Func No", number);
     m_counter.SetValue(5);
     FunctionWithAllMetadata();
+    FunctionWithRelation(__itt_scope_item.GetId()); // TODO: do something with ITT_SCOPE_MACRO to avoid uncler using of members created in macro
     WaitAndBusyThread(100);
 }
 
@@ -135,4 +136,11 @@ void InstrumentedWorker::FunctionWithAllMetadata()
     ITT_MARKER_ARG("int64_t", metadata_int64_t);
     ITT_MARKER_ARG("uint64_t", metadata_uint64_t);
     ITT_MARKER_ARG("string", metadata_string);
+}
+
+void InstrumentedWorker::FunctionWithRelation(__itt_id parent_task_id)
+{
+    ITT_SCOPE_TASK("Function with relation");
+    __itt_relation_add_to_current(__itt_domain_instance, __itt_relation::__itt_relation_is_child_of, parent_task_id);
+    WaitAndBusyThread(100);
 }

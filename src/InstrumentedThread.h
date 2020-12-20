@@ -32,6 +32,7 @@ private:
     void SecondFunction(uint32_t number);
     void RegionFunction();
     void FunctionWithAllMetadata();
+    void FunctionWithRelation(__itt_id parent_task_id);
 
     std::atomic<bool>      m_is_stopped = false;
     Itt::Counter<uint32_t> m_counter;

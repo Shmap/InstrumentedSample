@@ -48,6 +48,8 @@ namespace Itt
             , m_p_domain(p_domain)
         { }
 
+        __itt_id GetId() { return m_id; }
+
         template<class T>
         typename std::enable_if<std::is_floating_point<T>::value, void>::type AddArg(__itt_string_handle* p_name, const T& value) const noexcept
         {
