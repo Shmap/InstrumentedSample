@@ -1,6 +1,15 @@
 #include "InstrumentedThread.h"
 #include <ittnotify.h>
 
+CustomClock::CustomClock()
+{
+    m_clock_domain = __itt_clock_domain_create([](__itt_clock_info* clock_info, void* data)
+    {
+        clock_info->clock_base = 0u;
+        clock_info->clock_freq = 500u;
+    }, nullptr);
+}
+
 InstrumentedWorker::InstrumentedWorker()
     : m_counter("Counter 10-5", g_default_itt_domain_name)
 {
@@ -34,10 +43,13 @@ void InstrumentedWorker::WaitAndBusyThread(uint32_t milliseconds)
 
 void InstrumentedWorker::FirstFunction()
 {
-    ITT_SCOPE_TASK("First function on stack");
+    ITT_SCOPE_TASK_CUSTOM_CLOCK("First function on stack", m_custom_clock.GetClockDomain());
+    //ITT_SCOPE_TASK("First function on stack");
     static uint64_t number = 0;
     ITT_FUNCTION_ARG("Call No", number);
     m_counter.SetValue(10);
+
+    RegionFunction();
 
     WaitAndBusyThread(250);
     SecondFunction(1);
@@ -77,6 +89,12 @@ void InstrumentedWorker::SecondFunction(uint32_t number)
     ITT_FUNCTION_ARG("Func No", number);
     m_counter.SetValue(5);
     FunctionWithAllMetadata();
+    WaitAndBusyThread(100);
+}
+
+void InstrumentedWorker::RegionFunction()
+{
+    ITT_SCOPE_REGION("Region 1");
     WaitAndBusyThread(100);
 }
 

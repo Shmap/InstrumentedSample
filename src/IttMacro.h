@@ -133,6 +133,12 @@ namespace Itt
             }
         }
 
+        Task(const __itt_domain* p_domain, __itt_string_handle* p_name, __itt_clock_domain* p_clock_domain) noexcept
+            : Event(p_domain, p_name)
+        {
+            __itt_task_begin(m_p_domain, m_id, p_clock_domain, p_name);
+        }
+
         ~Task()
         {
             if (bRegion)
@@ -198,6 +204,11 @@ namespace Itt
 
 #define ITT_SCOPE_TASK(/*const char* */name) ITT_SCOPE(false, name)
 #define ITT_SCOPE_REGION(/*const char* */name) ITT_SCOPE(true, name)
+
+#define ITT_SCOPE_TASK_CUSTOM_CLOCK(/*const char* */name, /*__itt_clock_domain* */ clock_domain)\
+    static __itt_string_handle* __itt_scope_name = UNICODE_AGNOSTIC(__itt_string_handle_create)(name);\
+    ITT_DOMAIN_INIT();\
+    Itt::Task<false> __itt_scope_item(__itt_domain_instance, __itt_scope_name)
 
 #define ITT_MARKER(/*Itt::Marker::Scope*/scope, /*const char* */name) \
     ITT_DOMAIN_INIT(); \
