@@ -11,7 +11,7 @@ CustomClock::CustomClock()
 }
 
 InstrumentedWorker::InstrumentedWorker()
-    : m_counter("Counter 10-5", g_default_itt_domain_name)
+    : m_counter("Simple counter", g_default_itt_domain_name)
 {
 }
 
@@ -19,6 +19,7 @@ void InstrumentedWorker::StartWorking()
 {
     ITT_THREAD_NAME("Instrumented thread");
     ITT_DOMAIN_INIT();
+    m_counter.SetValue(0u);
     while (!m_is_stopped)
     {
         ITT_MARKER(Itt::Marker::Scope::Thread, "Stack delimiter");
@@ -58,10 +59,9 @@ void InstrumentedWorker::FirstFunction()
     ITT_SCOPE_TASK_CUSTOM_CLOCK("First function on stack", m_custom_clock.GetClockDomain());
     static uint64_t number = 0;
     ITT_FUNCTION_ARG("Call No", number);
-    m_counter.SetValue(10);
+    m_counter.SetValue(number);
 
     RegionFunction();
-
     WaitAndBusyThread(250);
     SecondFunctionLeft();
     WaitAndBusyThread(250);
@@ -73,7 +73,6 @@ void InstrumentedWorker::FirstFunction()
 void InstrumentedWorker::SecondFunctionLeft()
 {
     ITT_SCOPE_TASK("Second function on stack left");
-    m_counter.SetValue(5);
     FunctionWithAllMetadata();
     WaitAndBusyThread(100);
 }

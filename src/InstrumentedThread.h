@@ -49,6 +49,6 @@ private:
     void FunctionWithRelation(__itt_id parent_task_id);
 
     std::atomic<bool>      m_is_stopped = false;
-    Itt::Counter<uint32_t> m_counter;
+    Itt::Counter<uint64_t> m_counter;
     CustomClock            m_custom_clock;
 };
