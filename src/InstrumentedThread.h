@@ -6,6 +6,19 @@
 #include <atomic>
 #include <ittnotify.h>
 
+namespace DefaultMetadata
+{
+    constexpr const double      metadata_double = 100.100;
+    constexpr const float       metadata_float = 100.1f;
+    constexpr const int16_t     metadata_int16_t = -100;
+    constexpr const uint16_t    metadata_uint16_t = 100u;
+    constexpr const int32_t     metadata_int32_t = -100;
+    constexpr const uint32_t    metadata_uint32_t = 100;
+    constexpr const int64_t     metadata_int64_t = -100;
+    constexpr const uint64_t    metadata_uint64_t = 100u;
+    constexpr const char*       metadata_string = "metadata string";
+}
+
 class CustomClock
 {
 public:
@@ -29,7 +42,8 @@ private:
     void WaitAndBusyThread(uint32_t milliseconds);
 
     void FirstFunction();
-    void SecondFunction(uint32_t number);
+    void SecondFunctionLeft();
+    void SecondFunctionRight();
     void RegionFunction();
     void FunctionWithAllMetadata();
     void FunctionWithRelation(__itt_id parent_task_id);
